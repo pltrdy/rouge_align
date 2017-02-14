@@ -4,12 +4,13 @@ from pythonrouge import pythonrouge
 import numpy as np
 
 class RougeAlign:
-  def __init__(self, l1, l2, rouge_path, rouge_data, autorun=True, verbose=False):
+  def __init__(self, l1, l2, rouge_path, rouge_data, autorun=True, verbose=False, threshold=0):
     self.verbose = verbose
     self.l1 = l1
     self.l2 = l2
     self.rouge_path = rouge_path
     self.rouge_data = rouge_data
+    self.threshold = threshold
 
     if autorun:
       self.run(verbose)
@@ -69,6 +70,10 @@ class RougeAlign:
       while np.sum(row) > 0:
         m = np.argmax(row)
         v = row[m]
+        if v < self.threshold:
+          row = 0
+          continue
+
         log("\tMax(i/v): %d/%f" % (m,v))
         log("\t\t[%s]" % self.l2[m])
         col = d[:, m]
