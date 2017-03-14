@@ -27,10 +27,14 @@ class RougeAlign:
 
   def _build(self):
     log = self.log
-    log("\n*** BUID ***\n")
-        
+    log("\n*** BUILD ***\n")
+
+
+    self.l1 = [s for s in self.l1 if len(s) > 0 and s is not None]
+    self.l2 = [s for s in self.l2 if len(s) > 0 and s is not None]
+
     self.len1, self.len2 = len(self.l1), len(self.l2)
-    
+
     log("\n=== L1:")
     log(self.l1)
 
@@ -49,6 +53,9 @@ class RougeAlign:
       for j in xrange(self.len2):
         s1 = self.l1[i]
         s2 = self.l2[j]
+        if len(s1) == 0 or len(s2) == 0:
+          continue
+
         d = self.distance(s1, s2)
         log("%d %d %f ([%s] [%s]" %(i,j,d, s1, s2))
         dists[i][j] = d
@@ -117,8 +124,9 @@ class RougeAlign:
     plt.savefig(filename)
 
   def distance(self, s1, s2):
-    d = pythonrouge(s1, s2, ROUGE_path=self.rouge_path, data_path=self.rouge_data)
-    avg = np.mean([np.mean([d[k0][k1] for k1 in d[k0]]) for k0 in d])
+    d = pythonrouge([s1], [s2], ROUGE_path=self.rouge_path, data_path=self.rouge_data)
+    print(d)
+    avg = np.mean([d[k] for k in d])
     return avg
 
 if __name__ == "__main__":
