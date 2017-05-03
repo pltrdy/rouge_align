@@ -29,10 +29,6 @@ class RougeAlign:
     log = self.log
     log("\n*** BUILD ***\n")
 
-
-    self.l1 = [s for s in self.l1 if len(s) > 0 and s is not None]
-    self.l2 = [s for s in self.l2 if len(s) > 0 and s is not None]
-
     self.len1, self.len2 = len(self.l1), len(self.l2)
 
     log("\n=== L1:")
@@ -125,7 +121,6 @@ class RougeAlign:
 
   def distance(self, s1, s2):
     d = pythonrouge([s1], [s2], ROUGE_path=self.rouge_path, data_path=self.rouge_data)
-    print(d)
     avg = np.mean([d[k] for k in d])
     return avg
 
